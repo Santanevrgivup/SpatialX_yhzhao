@@ -983,7 +983,7 @@ SpatialVG.Assay <- function(object,
 	  
 	}else if(svg.method == "isvg"){
 	  
-	}else if(svg.method %in%c("spark","sparkx")){
+	}else if(svg.method %in%c("spark","sparkb","sparkx")){
 	  ## run default SpatialVG, assume new.data has been ordered by combined p-values
 	  new.data <- SpatialVG(object = data.use[features, , drop=FALSE],
 	                        svg.method = svg.method,
