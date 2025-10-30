@@ -890,6 +890,16 @@ SpatialVG.Assay <- function(object,
     if( !(slot.use %in% c("data","scale.data"))){
       stop(paste0("User provide method ", svg.method," requires 'slot.use = data/scale.data' \n"))
     }## end fi
+  }else if(svg.method == "sparkb"){## optimal for binarized counts data or highly-sparse data
+    svg.param$fit.model <- "binomial"
+    ## 10 kernels
+    kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
+    kernel.param$band.with <- rep(kernel.param$band.with, times=2)
+    names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)), paste0("COS", seq_len(5)))
+    kernel.param$kernel.type <- c(rep("gaussian", 5), rep("cosine",5))
+    if(slot.use != "counts"){
+      stop(paste0("User provide method ", svg.method," requires 'slot.use = counts' \n"))
+    }## end fi
   }else if(svg.method == "csvg"){## cell-type specific svgs
     svg.param$fit.model <- "poisson"
     ## 10 kernel
