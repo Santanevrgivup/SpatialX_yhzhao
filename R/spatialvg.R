@@ -519,7 +519,7 @@ SpatialVG.default <- function(object,
 			## format transformation
 			pvalues_datframe <- do.call(cbind, res_davies)
 			colnames(pvalues_datframe) <- paste0(c("pvalue.","stats.", "var."), rep(names(kernel.param),each=3))
-			pvalues <- data.frame(pvalues_datframe, row.names = make.names(genes.use,unique = TRUE))
+			pvalues <- data.frame(pvalues_datframe, row.names = make.unique(genes.use))#here used to be make.names(gene.use, unique = T), which may cause distortion of original gene names 
 			
 			res <- setNames(split(pvalues[,grepl("pvalue.",colnames(pvalues)),drop=FALSE], 
 			                      seq(nrow(pvalues))), rownames(pvalues))
@@ -545,13 +545,13 @@ SpatialVG.default <- function(object,
 							res <- ComputeTestQuantRcpp_cov(model1$Y, 
 							                                 model1$Py, 
 							                                 model1$X, 
-							                                 as.matrix(kernel.mat)[model1$idx, model1$idx], 
+							                                 as.matrix(kernel.mat)[ikernel][model1$idx, model1$idx], # here used to be as.matrix(kernel.mat)[model1$idx, model1$idx] which ignored that kernel.mat is a list
 							                                 model1$D^2, 
 							                                 model1$theta)
 						}else{
 							res <- ComputeTestQuantRcpp_nocov(model1$Y, 
 							                                   model1$Py, 
-							                                   as.matrix(kernel.mat)[model1$idx, model1$idx], 
+							                                   as.matrix(kernel.mat)[ikernel][model1$idx, model1$idx], 
 							                                   model1$D^2, 
 							                                   model1$theta)
 						}## end fi
@@ -572,7 +572,7 @@ SpatialVG.default <- function(object,
 				pvalues <- cbind(pvalues, matrix(unlist(res.all.genes), ncol = 3, byrow = TRUE) )
 			}## end for ikernel
 			colnames(pvalues) <- names(kernel.mat)
-			rownames(pvalues) <- make.names(genes.use,unique = TRUE)
+			rownames(pvalues) <- make.unique(genes.use)
 		}## end fi
 	}else if(fit.model == "binomial"){
 	#*************************************************#
@@ -654,7 +654,7 @@ SpatialVG.default <- function(object,
 		  pvalues <- do.call(cbind, res_davies)
 		  colnames(pvalues) <- paste0(c("pvalue.","stats.", "var."), rep(names(kernel.param),each=3))
       pvalues <- data.frame(pvalues, 
-                            row.names = make.names(genes.use,unique = TRUE))
+                            row.names = make.unique(genes.use)
       
       ## split p-values into different group for combining
       res <- setNames(split(pvalues[,grepl("pvalue.",colnames(pvalues)),drop=FALSE], 
@@ -681,13 +681,13 @@ SpatialVG.default <- function(object,
 							res <- ComputeTestQuantRcpp_cov(model1$Y, 
 							                                 model1$Py, 
 							                                 model1$X, 
-							                                 as.matrix(kernel.mat)[model1$idx, model1$idx], 
+							                                 as.matrix(kernel.mat)[ikernel][model1$idx, model1$idx], 
 							                                 model1$D^2, 
 							                                 model1$theta)
 						}else{
 							res <- ComputeTestQuantRcpp_nocov(model1$Y, 
 							                                   model1$Py, 
-							                                   as.matrix(kernel.mat)[model1$idx, model1$idx], 
+							                                   as.matrix(kernel.mat)[ikernel][model1$idx, model1$idx], 
 							                                   model1$D^2, 
 							                                   model1$theta)
 						}## end fi
@@ -708,7 +708,7 @@ SpatialVG.default <- function(object,
 				pvalues <- cbind(pvalues, matrix(unlist(res.all.genes), ncol = 3, byrow = TRUE) )
 			}## end for ikernel
 			colnames(pvalues) <- names(kernel.mat)
-			rownames(pvalues) <- make.names(genes.use,unique = TRUE)
+			rownames(pvalues) <- make.unique(genes.use)
 		}## end fi kernel.mat is provided
 
 	}else if(fit.model == "gaussian"){
@@ -767,7 +767,7 @@ SpatialVG.default <- function(object,
 		  return(res[,1])
 		})
 		pvalues <- do.call(cbind, res_davies)
-		rownames(pvalues) <- make.names(genes.use,unique = TRUE)
+		rownames(pvalues) <- make.unique(genes.use)
 		colnames(pvalues) <- names(kernel.param)
 		res <- setNames(split(pvalues, seq(nrow(pvalues))), rownames(pvalues))
 	}else if(fit.model == "nonparametric"){
@@ -815,7 +815,7 @@ SpatialVG.default <- function(object,
 	  })
 	  
 	  pvalues <- do.call(cbind, res_davies)
-	  rownames(pvalues) <- make.names(genes.use,unique = TRUE)
+	  rownames(pvalues) <- make.unique(genes.use)
 	  colnames(pvalues) <- names(kernel.param)
 	  res <- setNames(split(pvalues, seq(nrow(pvalues))), rownames(pvalues))
 	}## end fi
