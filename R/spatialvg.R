@@ -654,7 +654,7 @@ SpatialVG.default <- function(object,
 		  pvalues <- do.call(cbind, res_davies)
 		  colnames(pvalues) <- paste0(c("pvalue.","stats.", "var."), rep(names(kernel.param),each=3))
       pvalues <- data.frame(pvalues, 
-                            row.names = make.unique(genes.use)
+                            row.names = make.unique(genes.use))
       
       ## split p-values into different group for combining
       res <- setNames(split(pvalues[,grepl("pvalue.",colnames(pvalues)),drop=FALSE], 
