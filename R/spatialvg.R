@@ -868,7 +868,9 @@ SpatialVG.Assay <- function(object,
     cell.prop <- GetAssayData(object = object, slot = "cell.prop");
     cell.type <- colnames(cell.prop)
   }## end fi is.null
-  
+
+  # we consider only use gaussian kernel, 2026.1.15.22:37, yhzhao
+  if(is.null(kernel.param$band.with)){ 
   ## parameter settings check
   if(svg.method == "spark"){## nature methods' paper, SPARK
     svg.param$fit.model <- "poisson"
@@ -929,7 +931,10 @@ SpatialVG.Assay <- function(object,
       stop("SpatialVG.Assay::The 'fit.model' must be provided by user.")
     }
   }## end fi
-  
+  }else{ # 2026.1.15.22:48, yhzhao
+    names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)))
+	  kernel.param$kernel.type <- c(rep("gaussian", 5))
+	  }
   ## normalized counts, vst normalization method
   if(svg.param$fit.model == "gaussian"){
     if( !(slot.use %in% c("data","scale.data"))){
