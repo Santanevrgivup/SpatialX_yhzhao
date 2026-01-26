@@ -175,12 +175,13 @@ private:
     arma::sp_mat A = BuildKNNGraph(k_neighbors);
     
     // 2. 构建标准化拉普拉斯矩阵 (L_sym = I - D^-0.5 A D^-0.5)
-    arma::sp_vec d_sparse = arma::sum(A, 1);  // 先得到稀疏向量
-	arma::vec d = arma::conv_to<arma::vec>::from(d_sparse);  // 再转稠密
+   	arma::sp_mat d_sparse = arma::sum(A, 1);
+    arma::vec d = arma::vec(d_sparse);
     arma::vec d_inv_sqrt = 1.0 / arma::sqrt(d);
     d_inv_sqrt.replace(arma::datum::inf, 0);
     
-    arma::sp_mat D_mat = arma::sp_mat(arma::diagmat(d_inv_sqrt));
+    arma::sp_mat D_mat(num_cell, num_cell);
+	D_mat.diag() = d_inv_sqrt;
     arma::sp_mat L_part = D_mat * A * D_mat; // 这是 D^-0.5 A D^-0.5
     
     // Chebyshev 准备
