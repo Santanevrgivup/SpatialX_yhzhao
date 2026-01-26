@@ -871,70 +871,75 @@ SpatialVG.Assay <- function(object,
 
   # we consider only use gaussian kernel, 2026.1.15.22:37, yhzhao
   if(is.null(kernel.param$band.with)){ 
-  ## parameter settings check
-  if(svg.method == "spark"){## nature methods' paper, SPARK
-    svg.param$fit.model <- "poisson"
-    ## 10 kernels
-    kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
-    kernel.param$band.with <- rep(kernel.param$band.with, times=2)
-    names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)), paste0("COS", seq_len(5)))
-    kernel.param$kernel.type <- c(rep("gaussian", 5), rep("cosine",5))
-    if(slot.use != "counts"){
-      stop(paste0("User provide method ", svg.method," requires 'slot.use = counts' \n"))
-    }## end fi
-  }else if(svg.method == "sparkx"){## genome biology's paper, SPARK-X
-    svg.param$fit.model <- "nonparametric"
-    ## 10 kernels
-    kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
-    kernel.param$band.with <- rep(kernel.param$band.with, times=2)
-    names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)), paste0("COS", seq_len(5)))
-    kernel.param$kernel.type <- c(rep("gaussian", 5), rep("cosine",5))
-    if( !(slot.use %in% c("data","scale.data"))){
-      stop(paste0("User provide method ", svg.method," requires 'slot.use = data/scale.data' \n"))
-    }## end fi
-  }else if(svg.method == "sparkb"){## optimal for binarized counts data or highly-sparse data
-    svg.param$fit.model <- "binomial"
-    ## 10 kernels
-    kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
-    kernel.param$band.with <- rep(kernel.param$band.with, times=2)
-    names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)), paste0("COS", seq_len(5)))
-    kernel.param$kernel.type <- c(rep("gaussian", 5), rep("cosine",5))
-    if(slot.use != "counts"){
-      stop(paste0("User provide method ", svg.method," requires 'slot.use = counts' \n"))
-    }## end fi
-  }else if(svg.method == "csvg"){## cell-type specific svgs
-    svg.param$fit.model <- "poisson"
-    ## 10 kernel
-    kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
-    kernel.param$band.with <- rep(kernel.param$band.with, times=2)
-    names(kernel.param$band.with) <- c(paste0("gaussian", seq_len(5)), paste0("matern", seq_len(5)))
-    kernel.param$kernel.type <- c(rep("gaussian", 5), rep("matern",5))
-    if(slot.use != "counts"){
-      stop(paste0("User provide method ", svg.method," requires 'slot.use = counts' \n"))
-    }## end fi
-    
-  }else if(svg.method == "dsvg"){## domain specific svgs
-    svg.param$fit.model <- "poisson"
-    ## 10 kernels
-    
-    
-  }else if(svg.method == "isvg"){## interaction svgs
-    svg.param$fit.model <- "poisson"
-    ## 10 kernels
-    
-    
-  }else{
-    if(is.null(svg.param$fit.model)){
-      stop("SpatialVG.Assay::The 'fit.model' must be provided by user.")
-    }## end fi
-    if(is.null(kernel.param$band.with) || is.null(kernel.param$kernel.type)){
-      stop("SpatialVG.Assay::The 'fit.model' must be provided by user.")
-    }
-  }## end fi
+  	## parameter settings check
+	  if(svg.method == "spark"){## nature methods' paper, SPARK
+		svg.param$fit.model <- "poisson"
+		## 10 kernels
+		kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
+		kernel.param$band.with <- rep(kernel.param$band.with, times=2)
+		names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)), paste0("COS", seq_len(5)))
+		kernel.param$kernel.type <- c(rep("gaussian", 5), rep("cosine",5))
+		if(slot.use != "counts"){
+		  stop(paste0("User provide method ", svg.method," requires 'slot.use = counts' \n"))
+		}## end fi
+	  }else if(svg.method == "sparkx"){## genome biology's paper, SPARK-X
+		svg.param$fit.model <- "nonparametric"
+		## 10 kernels
+		kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
+		kernel.param$band.with <- rep(kernel.param$band.with, times=2)
+		names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)), paste0("COS", seq_len(5)))
+		kernel.param$kernel.type <- c(rep("gaussian", 5), rep("cosine",5))
+		if( !(slot.use %in% c("data","scale.data"))){
+		  stop(paste0("User provide method ", svg.method," requires 'slot.use = data/scale.data' \n"))
+		}## end fi
+	  }else if(svg.method == "sparkb"){## optimal for binarized counts data or highly-sparse data
+		svg.param$fit.model <- "binomial"
+		## 10 kernels
+		kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
+		kernel.param$band.with <- rep(kernel.param$band.with, times=2)
+		names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)), paste0("COS", seq_len(5)))
+		kernel.param$kernel.type <- c(rep("gaussian", 5), rep("cosine",5))
+		if(slot.use != "counts"){
+		  stop(paste0("User provide method ", svg.method," requires 'slot.use = counts' \n"))
+		}## end fi
+	  }else if(svg.method == "csvg"){## cell-type specific svgs
+		svg.param$fit.model <- "poisson"
+		## 10 kernel
+		kernel.param$band.with <- ComputeKernelParamLessMem(location)$kparam[3:7]
+		kernel.param$band.with <- rep(kernel.param$band.with, times=2)
+		names(kernel.param$band.with) <- c(paste0("gaussian", seq_len(5)), paste0("matern", seq_len(5)))
+		kernel.param$kernel.type <- c(rep("gaussian", 5), rep("matern",5))
+		if(slot.use != "counts"){
+		  stop(paste0("User provide method ", svg.method," requires 'slot.use = counts' \n"))
+		}## end fi
+		
+	  }else if(svg.method == "dsvg"){## domain specific svgs
+		svg.param$fit.model <- "poisson"
+		## 10 kernels
+		
+		
+	  }else if(svg.method == "isvg"){## interaction svgs
+		svg.param$fit.model <- "poisson"
+		## 10 kernels
+		
+		
+	  }else{
+		if(is.null(svg.param$fit.model)){
+		  stop("SpatialVG.Assay::The 'fit.model' must be provided by user.")
+		}## end fi
+		if(is.null(kernel.param$band.with) || is.null(kernel.param$kernel.type)){
+		  stop("SpatialVG.Assay::The 'fit.model' must be provided by user.")
+		}
+	  }## end fi
   }else{ # 2026.1.15.22:48, yhzhao
-    names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)))
-	  kernel.param$kernel.type <- c(rep("gaussian", 5))
-	  }
+	if(kernel.param$kernel.type == "graph"{
+		names(kernel.param$band.with) <- "GRP"
+		kernel.param$kernel.type <- "graph"
+	}else{	  
+	    names(kernel.param$band.with) <- c(paste0("GSP", seq_len(5)))
+	  	kernel.param$kernel.type <- c(rep("gaussian", 5))
+	}
+  }
   ## normalized counts, vst normalization method
   if(svg.param$fit.model == "gaussian"){
     if( !(slot.use %in% c("data","scale.data"))){
