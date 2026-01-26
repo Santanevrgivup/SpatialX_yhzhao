@@ -175,7 +175,8 @@ private:
     arma::sp_mat A = BuildKNNGraph(k_neighbors);
     
     // 2. 构建标准化拉普拉斯矩阵 (L_sym = I - D^-0.5 A D^-0.5)
-    arma::vec d = arma::conv_to<arma::vec>::from(arma::sum(A, 1));
+    arma::sp_vec d_sparse = arma::sum(A, 1);  // 先得到稀疏向量
+	arma::vec d = arma::conv_to<arma::vec>::from(d_sparse);  // 再转稠密
     arma::vec d_inv_sqrt = 1.0 / arma::sqrt(d);
     d_inv_sqrt.replace(arma::datum::inf, 0);
     
