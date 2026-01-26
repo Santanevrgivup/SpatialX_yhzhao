@@ -932,7 +932,7 @@ SpatialVG.Assay <- function(object,
 		}
 	  }## end fi
   }else{ # 2026.1.15.22:48, yhzhao
-	if(kernel.param$kernel.type == "graph"{
+	if(kernel.param$kernel.type == "graph"){
 		names(kernel.param$band.with) <- "GRP"
 		kernel.param$kernel.type <- "graph"
 	}else{	  
